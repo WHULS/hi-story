@@ -219,6 +219,10 @@ export default {
                 name: '清',
                 identifier: 'ad1820'
               },
+              {//当代
+                name: '当代',
+                identifier: 'now'
+              },
             ]
           }
         ]

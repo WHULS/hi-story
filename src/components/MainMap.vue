@@ -43,7 +43,7 @@ export default {
         opacity: 0.7
       }),
       wmtsLayer: new TileLayer({
-        opacity: 0.9
+        opacity: 0.8
       }),
       drawingLayer: new VectorLayer({
         source: new VectorSource({ wrapX: false }),
@@ -142,6 +142,12 @@ export default {
   methods: {
     setWmtsSource(identifier) {
       const self = this;
+
+      if (identifier === 'now') {
+        self.wmtsLayer.setSource(null);
+        return;
+      }
+      
       if (self.wmtsResults === undefined)
       {
         let parser = new WMTSCapabilities();
