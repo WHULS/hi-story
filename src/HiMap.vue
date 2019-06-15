@@ -1,22 +1,40 @@
 <template>
   <div id="app">
-    <main-map></main-map>
+    <main-map :identifier="identifier"></main-map>
+    <function-area @dynasty-change="onDynastyChange"></function-area>
+    <portrait></portrait>
+    <information></information>
   </div>
 </template>
 
 <script>
 // Map
 import MainMap from './components/MainMap.vue';
-// Function button
+// Function Area
+import FunctionArea from './components/FunctionArea.vue';
+// User portrait
+import Portrait from './components/Portrait.vue';
 // Map control
 // Query field
-// User portrait
 // Year line
+// Department information
+import Information from './components/Information.vue';
 
 export default {
   name: 'HiMap',
   components: {
-    MainMap
+    MainMap, FunctionArea, Portrait, Information
+  },
+
+  data() {
+    return {
+      identifier: ''
+    }
+  },
+  methods: {
+    onDynastyChange(i) {
+      this.identifier = i;
+    },
   }
 }
 </script>
