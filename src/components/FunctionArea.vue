@@ -41,7 +41,7 @@
           <td>
             <span class="peopleinfor-btn">
               <span @click="onPeopleInforClick(people.c_personid)">资料</span>
-              <span @click="onPeopleRouteClick(people.c_personid)">路线</span>
+              <span @click="onPeopleRouteClick(people.c_personid)" v-if="people.event_number !== 0">路线</span>
             </span>
           </td>
         </tr>
@@ -49,6 +49,10 @@
       <br/>
     </div>
   </div>
+
+  <peopleinfo-dialog v-if="isPeopleInfoDialogShow" :c_personid="currentPersonId"
+    @close-dialog="isPeopleInfoDialogShow = false;"
+  ></peopleinfo-dialog>
 
   <div :style="Tools.dialogStyle" v-if="isToolsDialogShow" @click.stop class="tools-dialog">
     <div @click="onScreenShotClick()">
@@ -77,9 +81,13 @@
 
 <script>
 import bus from './bus.js';
+import PeopleinfoDialog from './PeopleInfoDialog.vue';
 
 export default {
   name: 'functionArea',
+  components: {
+    PeopleinfoDialog
+  },
   watch: {
     isToolsDialogShow: function (val, oldVal) {
       if (val === true) {
@@ -134,6 +142,7 @@ export default {
       isPeopleDialogShow: false,
       isToolsDialogShow: false,
       isQueryDialogShow: false,
+      isPeopleInfoDialogShow: false,
 
       Dynasty: {
         dialogStyle: {
@@ -258,9 +267,17 @@ export default {
       },
 
       searchPeopleString: '',
-      searchPeople: [],
+      searchPeople: [
+        {
+          c_personid: 19713,
+          c_name: 'Li Qingzhao',
+          c_name_chn: '李清照',
+          event_number: 41
+        }
+      ],
 
-      timeOutIdentifier: 0
+      timeOutIdentifier: 0,
+      currentPersonId: 0
     }
   },
   methods: {
@@ -360,7 +377,11 @@ export default {
     },
 
     onPeopleInforClick(cbdbid) {
-      alert(cbdbid);
+      const self = this;
+      self.currentPersonId = cbdbid;
+      self.isPeopleInfoDialogShow = true;
+
+
     },
     onPeopleRouteClick(cbdbid) {
       alert(cbdbid);
@@ -387,7 +408,7 @@ export default {
             c_name: people.c_name,
             c_name_chn: people.c_name_chn,
             c_personid: people.c_personid,
-            events: []
+            event_number: people.event_number
           });
         });
       })
