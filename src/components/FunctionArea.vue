@@ -28,7 +28,26 @@
   </div>
 
   <div :style="People.dialogStyle" v-if="isPeopleDialogShow" class="dialog-content" @click.stop>
-
+    <p class="dialog-header">人物列表</p>
+    <hr>
+    <input class="search-people-input" v-model="searchPeopleString" placeholder="人物姓名或拼音缩写..."/>
+    <div class="search-people-button" @click="onSearchPeopleClick()">
+      <img style="height:inherit;width:inherit;" src="../assets/search.png"/>
+    </div>
+    <div class="search-people-content">
+      <table width="100%">
+        <tr v-for="people in searchPeople" :key="people.c_personid">
+          <td>{{ people.c_name_chn }}</td>
+          <td>
+            <span class="peopleinfor-btn">
+              <span @click="onPeopleInforClick(people.c_personid)">资料</span>
+              <span @click="onPeopleRouteClick(people.c_personid)">路线</span>
+            </span>
+          </td>
+        </tr>
+      </table>
+      <br/>
+    </div>
   </div>
 
   <div :style="Tools.dialogStyle" v-if="isToolsDialogShow" @click.stop class="tools-dialog">
@@ -65,6 +84,16 @@ export default {
     isToolsDialogShow: function (val, oldVal) {
       if (val === true) {
         this.isQueryDialogShow = false;
+      }
+    },
+    searchPeopleString: function (val, oldVal) {
+      if (val !== oldVal)
+      {
+        clearTimeout(this.timeOutIdentifier);
+
+        this.timeOutIdentifier = setTimeout(() => {
+          this.onSearchPeopleClick();
+        }, 1000);
       }
     }
   },
@@ -122,7 +151,7 @@ export default {
       People: {
         dialogStyle: {
           padding: '0 5px 10px',
-          width: '274px',
+          width: '180px',
           position: 'absolute',
           margin: '0',
           top: '60px',
@@ -227,6 +256,11 @@ export default {
           }
         ]
       },
+
+      searchPeopleString: '',
+      searchPeople: [],
+
+      timeOutIdentifier: 0
     }
   },
   methods: {
@@ -324,6 +358,45 @@ export default {
     onOneDynastyClick(identifier) {
       this.$emit('dynasty-change', identifier);
     },
+
+    onPeopleInforClick(cbdbid) {
+      alert(cbdbid);
+    },
+    onPeopleRouteClick(cbdbid) {
+      alert(cbdbid);
+    },
+
+    onSearchPeopleClick() {
+      const self = this;
+      const str = self.searchPeopleString;
+
+      if (str === '') {
+        self.searchPeople = [];
+        return;
+      }
+      
+      self.$axios.post('/api/search-people', {
+        nameString: str
+      })
+      .then( response => {
+        const results = response.data.results;
+        self.searchPeople = [];
+
+        results.forEach( people => {
+          self.searchPeople.push({
+            c_name: people.c_name,
+            c_name_chn: people.c_name_chn,
+            c_personid: people.c_personid,
+            events: []
+          });
+        });
+      })
+      .catch( error => {
+        if (error) {
+          console.error(error);
+        }
+      });
+    }
   },
 }
 </script>
@@ -407,5 +480,44 @@ export default {
 }
 .query-dialog > div div:hover {
   color: #0c88e8;
+}
+.search-people-input {
+  position: absolute;
+  height: auto;
+  width: 165px;
+  left: 10px;
+}
+.search-people-button {
+  position: absolute;
+  right: 12px;
+  height: 20px;
+  width: 20px;
+  top: 33px;
+  cursor: pointer;
+}
+.search-people-content {
+  margin: 35px 5px 0;
+  height: 200px;
+  overflow-y: scroll;
+  -ms-overflow-style: none; /* Hide scroll bar for IE 10+*/
+}
+/* Hide scroll bar for Chrome */
+.search-people-content::-webkit-scrollbar {
+  width: 0 !important;
+}
+
+.peopleinfor-btn {
+  color: #0c88e8;
+  text-align: right;
+  width: 100%;
+}
+.peopleinfor-btn span {
+  margin: 0 2px;
+}
+
+
+.peopleinfor-btn span:hover{
+  cursor: pointer;
+  text-decoration: underline;
 }
 </style>
