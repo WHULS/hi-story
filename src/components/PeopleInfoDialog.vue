@@ -4,7 +4,9 @@
       <img src="../assets/cross.png"/>
     </div>
 
-
+    <div class="peopleinfor-reference">
+      CBDB API: <a :href="'https://cbdb.fas.harvard.edu/cbdbapi/person.php?id=' + c_personid" target="_blank">{{ peopleInformation.c_name_chn }}</a>
+    </div>
   </div>
 </template>
 <script>
@@ -16,6 +18,13 @@ export default {
       required: true
     }
   },
+  watch: {
+    c_personid: function (val, oldVal) {
+      if (val != oldVal) {
+        this.updateInformation(val);
+      }
+    }
+  },
   data() {
     return {
       mainDialogStyle: {
@@ -23,23 +32,32 @@ export default {
         width: innerHeight * 0.8 + 'px',
         left: (innerWidth * 0.5 - innerHeight * 0.4) + 'px',
         top: innerHeight * 0.1 + 'px'
+      },
+      peopleInformation: {
+        c_name_chn: ''
       }
     }
   },
+  methods: {
+    updateInformation(id) {
+      const self = this;
+      self.$axios.post('/api/people-information', {
+        c_personid: self.c_personid
+      })
+      .then( response => {
+        const results = response.data.results;
+        console.log(results);
+        self.peopleInformation = results;
+      })
+      .catch( error => {
+        if (error) {
+          console.log(error);
+        }
+      });
+    }
+  },
   created() {
-    const self = this;
-    self.$axios.post('/api/people-information', {
-      c_personid: self.c_personid
-    })
-    .then( response => {
-      const results = response.data.results;
-      console.log(results);
-    })
-    .catch( error => {
-      if (error) {
-        console.log(error);
-      }
-    });
+    this.updateInformation(this.c_personid);
   },
 }
 </script>
@@ -62,5 +80,10 @@ export default {
 .close-btn img {
   height: inherit;
   width: inherit;
+}
+.peopleinfor-reference {
+  position: absolute;
+  bottom: 10px;
+  left: 10px;
 }
 </style>

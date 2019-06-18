@@ -17,6 +17,8 @@
       <div>
         <a href="https://www.openlayers.org/" target="_blank">Openlayers</a>
       </div>
+      |
+      <a href="https://projects.iq.harvard.edu/cbdb" target="_blank">China Biographical Database Peoject(CBDB)</a>
     </div>
   </div>
 </template>
