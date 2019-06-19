@@ -9,7 +9,10 @@
     </div>
   </div>
 </template>
+
 <script>
+import S from 'chinese-s2t';
+
 export default {
   name: 'people-information-dialog',
   props: {
@@ -46,8 +49,12 @@ export default {
       })
       .then( response => {
         const results = response.data.results;
-        console.log(results);
-        self.peopleInformation = results;
+
+        // Traditional to Simple Chinese
+        let tResults = JSON.stringify(results);
+        let sResults = S.t2s(tResults);
+
+        self.peopleInformation = JSON.parse(sResults);
       })
       .catch( error => {
         if (error) {
