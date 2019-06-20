@@ -4,7 +4,7 @@ module.exports = {
   devServer: {
     proxy: {
       '/api': {
-        target: 'http://192.168.1.103:8888/', // 在这里输入代理地址
+        target: 'http://192.168.1.102:8888/', // 在这里输入代理地址
         // target: 'http://localhost:8888/',
         changeOrigin: true,
         pathRewrite: {

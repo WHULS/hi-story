@@ -273,7 +273,19 @@ export default {
           c_name: 'Li Qingzhao',
           c_name_chn: '李清照',
           event_number: 41
-        }
+        },
+        {
+          c_personid: 1762,
+          c_name: 'Wang Anshi',
+          c_name_chn: '王安石',
+          event_number: 0
+        },
+        {
+          c_personid: 423045,
+          c_name: 'Su Xueshi',
+          c_name_chn: '蘇學軾',
+          event_number: 0
+        },
       ],
 
       timeOutIdentifier: 0,
@@ -380,8 +392,6 @@ export default {
       const self = this;
       self.currentPersonId = cbdbid;
       self.isPeopleInfoDialogShow = true;
-
-
     },
     onPeopleRouteClick(cbdbid) {
       alert(cbdbid);
@@ -401,6 +411,7 @@ export default {
       })
       .then( response => {
         const results = response.data.results;
+        console.log(results);
         self.searchPeople = [];
 
         results.forEach( people => {

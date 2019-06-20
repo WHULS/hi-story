@@ -7,39 +7,214 @@
       <!-- Carousel走马灯样式 -->
       <div class="peopleinfor-main-carousel">
         <el-carousel trigger="click" height="inherit" :autoplay="false" @change="onCarouselChange">
+          
+          <!-- 1. Basic information -->
           <el-carousel-item>
-            <div style="margin:10px 50px;text-align:left;">
-              <p>姓名：{{ basicInformation.ChName }}</p>
+            <div class="peopleinfor-carousel-item">
+              <table>
+                <col width="100px"/>
+                <tr>
+                  <td>CBDB ID</td>
+                  <td>{{ basicInformation.PersonId }}</td>
+                </tr>
+                <tr>
+                  <td>中文/英文名</td>
+                  <td>{{ basicInformation.ChName }}/{{ basicInformation.EngName }}</td>
+                </tr>
+                <tr>
+                  <td>生年</td>
+                  <td>
+                    <span v-if="basicInformation.EraYearBirth">
+                      {{ basicInformation.DynastyBirth }}
+                      {{ basicInformation.EraBirth }}
+                      {{ basicInformation.EraYearBirth }}年
+                    </span>
+                    <span v-if="basicInformation.YearBirth">
+                      ({{ basicInformation.YearBirth }})
+                    </span>
+                  </td>
+                </tr>
+                <tr>
+                  <td>卒年</td>
+                  <td>
+                    <span v-if="basicInformation.EraYearDeath">
+                      {{ basicInformation.DynastyDeath }}
+                      {{ basicInformation.EraDeath }}
+                      {{ basicInformation.EraYearDeath }}年
+                    </span>
+                    <span v-if="basicInformation.YearDeath">
+                      ({{ basicInformation.YearDeath }})
+                    </span>
+                  </td>
+                </tr>
+                <tr>
+                  <td>享年</td>
+                  <td>
+                    <span v-if="basicInformation.YearsLived">{{ basicInformation.YearsLived }}岁</span>
+                    <span v-else>Unknown</span>
+                  </td>
+                </tr>
+                <tr>
+                  <td>性别</td>
+                  <td>{{ basicInformation.Gender === 0 ? '男' : '女'}}</td>
+                </tr>
+                <tr>
+                  <td>郡望</td>
+                  <td>{{ basicInformation.JunWang }}</td>
+                </tr>
+                <tr>
+                  <td>社会区分</td>
+                  <td>
+                    <div v-for="item in socialStatus" :key="item.StatusName">{{ item.StatusName }}</div>
+                  </td>
+                </tr>
+                <tr>
+                  <td>地籍信息</td>
+                  <td>
+                    <ol style="margin:0 -20px;">
+                      <li v-for="item in addresses" :key="item.belongs5_name + item.belongs4_name + item.belongs3_name + item.belongs2_name + item.belongs1_name">
+                        <span>{{ item.AddrType }} : </span>
+                        <span>
+                          {{ item.belongs5_name ? item.belongs5_name + ' / ' : '' }}
+                          {{ item.belongs4_name ? item.belongs4_name + ' / ' : '' }}
+                          {{ item.belongs3_name ? item.belongs3_name + ' / ' : '' }}
+                          {{ item.belongs2_name ? item.belongs2_name + ' / ' : '' }}
+                          {{ item.belongs1_name ? item.belongs1_name + ' / ' : '' }}
+                          {{ item.AddrName }}
+                        </span>
+                        <br/>
+                        <ul>
+                          <li>出处：{{ item.Source }} <span v-if="item.Pages !== '0000'">({{ item.Pages }})页</span></li>
+                          <li v-if="item.Notes">注记：{{ item.Notes }}</li>
+                        </ul>
+                      </li>
+                    </ol>
+                  </td>
+                </tr>
+                <tr style="height:15px;"></tr>
+                <tr>
+                  <td>别名</td>
+                  <td>
+                    <table>
+                      <tr v-for="item in aliases" :key="item.AliasType">
+                        <td>{{ item.AliasType }}</td>
+                        <td>{{ item.AliasName }}</td>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+                <tr style="height:15px;"></tr>
+                <tr>
+                  <td>入仕信息</td>
+                  <td>
+                    <div v-for="item in entry" :key="item.RuShiDoor">
+                      入仕门：{{ item.RuShiDoor }}
+                      <br/>
+                      入仕别：{{ item.RuShiType }}
+                      <br/>
+                      <ul style="margin:0;">
+                        <li>出处：{{ item.Source }} <span v-if="item.Pages">({{ item.Pages }})页</span></li>
+                        <li v-if="item.Notes">注记：{{ item.Notes }}</li>
+                      </ul>
+                    </div>
+                  </td>
+                </tr>
+              </table>
+              <hr/>
+              <table>
+                <col width="100px"/>
+                <tr>
+                  <td>注</td>
+                  <td>{{ basicInformation.Notes }}</td>
+                </tr>
+                <tr>
+                  <td>出处</td>
+                  <table>
+                    <tr v-for="item in informationSources" :key="item.Source">
+                      <td style="font-weight:normal;">{{ item.Source }}</td>
+                      <td>{{ item.Pages }}(页)</td>
+                    </tr>
+                  </table>
+                </tr>
+              </table>
+            </div>
+          </el-carousel-item>
+          
+          <!-- 2. Posting information -->
+          <el-carousel-item>
+            <div class="peopleinfor-carousel-item">
+              <h1 style="text-align:left;margin:0;">任官</h1>
+              <ol>
+                <li v-for="item in postings" :key="item.OfficeName + item.FirstYear">
+                  <span>{{ item.OfficeName }} </span>
+                  <span style="display:inline-block;border:1px solid black;"> {{ item.ChuShouType }}</span>
+                  <br/>
+                  <ul>
+                    <li>地点：{{ item.AddrName }}</li>
+                    <li>起始年: {{ item.FirstYear === 0 ? '未详' : item.FirstYear + '[' + item.FirstYearRange + ']' }}</li>
+                    <li>终止年：{{ item.LastYear === 0 ? '未详' : item.LastYear + '[' + item.LastYearRange + ']' }}</li>
+                    <li v-if="item.Source"><span style="font-weight:bold;">出处：</span>{{ item.Source }}</li>
+                    <li v-if="item.Pages">{{ item.Pages }}(页)</li>
+                  </ul>
+                </li>
+              </ol>
+            </div>
+          </el-carousel-item>
+
+          <!-- 3. Kinship information -->
+          <el-carousel-item>
+            <div class="peopleinfor-carousel-item">
+              <h1 style="text-align:left;margin:0;">亲属关系</h1>
+              <ol>
+                <li v-for="item in kinship" :key="item.KinPersonName + ' - ' + item.KinRelName">
+                  <span>
+                    <a :href="'https://cbdb.fas.harvard.edu/cbdbapi/person.php?id=' + item.KinPersonId" target="_blank">
+                      {{ item.KinPersonName }}
+                    </a>
+                  </span>
+                  [<span style="font-weight:bold;">{{ item.KinRelName }}</span>]
+                  <br/>
+                  <ul>
+                    <li>
+                      <span v-if="item.Source">出处：{{ item.Source }}</span>
+                      <span v-if="item.Pages">({{ item.Pages }}页)</span>
+                    </li>
+                    <li v-if="item.Notes">注记：{{ item.Notes }}</li>
+                  </ul>
+                </li>
+              </ol>
             </div>
           </el-carousel-item>
           <el-carousel-item>
-            <div style="margin:10px 50px;text-align:left;">
-              <p>别名：{{ aliases }}</p>
+            <div class="peopleinfor-carousel-item">
+              <h1 style="text-align:left;margin:0;">社会关系</h1>
+              <ol>
+                <li v-for="item in association" :key="item.AssocCode + item.AssocPersonId">
+                  <span>
+                    {{ item.AssocName.split('Y')[0] }}
+                    <a :href="'https://cbdb.fas.harvard.edu/cbdbapi/person.php?id=' + item.AssocPersonId" target="_blank">
+                      {{ item.AssocPersonName }}
+                    </a>
+                    {{ item.AssocName.split('Y')[1] }}
+                  </span>
+                  <br/>
+                  <ul>
+                    <li>
+                      <span v-if="item.Source">出处：{{ item.Source }}</span>
+                      <span v-if="item.Pages">({{ item.Pages }}页)</span>
+                    </li>
+                    <li v-if="item.Notes">注记：{{ item.Notes }}</li>
+                  </ul>
+                </li>
+              </ol>
             </div>
           </el-carousel-item>
           <el-carousel-item>
-            <div style="margin:10px 50px;text-align:left;">
-              Postings
-            </div>
-          </el-carousel-item>
-          <el-carousel-item>
-            <div style="margin:10px 50px;text-align:left;">
-              Social Status
-            </div>
-          </el-carousel-item>
-          <el-carousel-item>
-            <div style="margin:10px 50px;text-align:left;">
-              Kinship
-            </div>
-          </el-carousel-item>
-          <el-carousel-item>
-            <div style="margin:10px 50px;text-align:left;">
-              Association
-            </div>
-          </el-carousel-item>
-          <el-carousel-item>
-            <div style="margin:10px 50px;text-align:left;">
-              Works
+            <div class="peopleinfor-carousel-item">
+              <h1 style="text-align:left;margin:0;">作品</h1>
+              <table>
+
+              </table>
             </div>
           </el-carousel-item>
         </el-carousel>
@@ -74,7 +249,17 @@ export default {
         this.kinship = [];
         this.association = [];
         this.works = [];
+
         this.updateBasicInformation();
+        this.updateSources();
+        this.updateAliases();
+        this.updateAddresses();
+        this.updateEntry();
+        this.updatePostings();
+        this.updateSocialStatus();
+        this.updateKinship();
+        this.updateAssociation();
+        this.updateWorks();
       }
     }
   },
@@ -91,19 +276,17 @@ export default {
         ChName: ''
       },
       informationSources: [],
-      // 2
       aliases: [],
       addresses: [],
       entry: [],
-      // 3
-      postings: [],
-      // 4
       socialStatus: [],
-      // 5
+      // 2
+      postings: [],
+      // 3
       kinship: [],
-      // 6
+      // 4
       association: [],
-      // 7
+      // 5
       works: []
     }
   },
@@ -296,6 +479,8 @@ export default {
           let sResultsStr = S.t2s(tResultsStr);
 
           self.association = JSON.parse(sResultsStr);
+
+          console.log(self.association);
         })
         .catch( error => {
           if (error) {
@@ -318,6 +503,8 @@ export default {
           let sResultsStr = S.t2s(tResultsStr);
 
           self.works = JSON.parse(sResultsStr);
+
+          console.log(self.works);
         })
         .catch( error => {
           if (error) {
@@ -327,40 +514,48 @@ export default {
       }
     },
     onCarouselChange (idx) {
-      switch (idx) {
-        case 1:
-          this.updateAliases();
-          this.updateAddresses();
-          this.updateEntry();
-          break;
-        case 2:
-          this.updatePostings();
-          break;
-        case 3:
-          this.updateSocialStatus();
-          break;
-        case 4:
-          this.updateKinship();
-          break;
-        case 5:
-          this.updateAssociation();
-          break;
-        case 6:
-          this.updateWorks();
-          break;
-        case 0:
-        default:
-          break;
-      }
+      // switch (idx) {
+      //   case 1:
+      //     this.updateAliases();
+      //     this.updateAddresses();
+      //     this.updateEntry();
+      //     this.updatePostings();
+      //     this.updateSocialStatus();
+      //     break;
+      //   case 2:
+      //     this.updateKinship();
+      //     break;
+      //   case 3:
+      //     this.updateAssociation();
+      //     break;
+      //   case 4:
+      //     this.updateWorks();
+      //     break;
+      //   case 0:
+      //   default:
+      //     break;
+      // }
     }
   },
   created() {
     this.updateBasicInformation();
+    this.updateSources();
+    this.updateAliases();
+    this.updateAddresses();
+    this.updateEntry();
+    this.updatePostings();
+    this.updateSocialStatus();
+    this.updateKinship();
+    this.updateAssociation();
+    this.updateWorks();
   },
 }
 </script>
 
 <style>
+hr {
+  border: 1px dashed gray;
+}
 .peopleinfor-dialog {
   position: absolute;
   border: 2px dashed rgb(123, 125, 231);
@@ -404,6 +599,27 @@ export default {
   position: absolute;
   height: 100%;
   width: 100%;
+}
+.peopleinfor-carousel-item {
+  position: absolute;
+  top: 30px;
+  left: 50px;
+  right: 50px;
+  bottom: 30px;
+  text-align: left;
+  overflow-y: scroll;
+}
+.peopleinfor-carousel-item a {
+  text-decoration: none;
+  color: #0c88e8;
+}
+.peopleinfor-carousel-item a:hover {
+  text-decoration: underline;
+}
+/* 表格首列样式 */
+.peopleinfor-main-carousel tr td:nth-child(1) {
+  font-weight: bold;
+  vertical-align: top;
 }
 .el-carousel {
   height: inherit;
