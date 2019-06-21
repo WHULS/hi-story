@@ -3,12 +3,12 @@ module.exports = {
   // 开发配置
   devServer: {
     proxy: {
-      '/api': {
+      '/hi_story': {
         target: 'http://study.rsgis.whu.edu.cn/', // 在这里输入代理地址
         // target: 'http://localhost:8888/',
         changeOrigin: true,
         pathRewrite: {
-          '^/api': '/hi_story'
+          '^/hi_story': '/hi_story'
         }
       }
     },

@@ -305,7 +305,7 @@ export default {
   methods: {
     updateBasicInformation() {
       const self = this;
-      self.$axios.post('/api/person-information', {
+      self.$axios.post('/hi_story/person-information', {
         c_personid: self.c_personid
       })
       .then( response => {
@@ -326,7 +326,7 @@ export default {
     updateSources () {
       const self = this;
       if (self.informationSources.length === 0) {
-        self.$axios.post('/api/person-information-sources', {
+        self.$axios.post('/hi_story/person-information-sources', {
           c_personid: self.c_personid
         })
         .then( response => {
@@ -348,7 +348,7 @@ export default {
     updateAliases () {
       const self = this;
       if (self.aliases.length === 0) {
-        self.$axios.post('/api/person-aliases', {
+        self.$axios.post('/hi_story/person-aliases', {
           c_personid: self.c_personid
         })
         .then( response => {
@@ -370,7 +370,7 @@ export default {
     updateAddresses () {
       const self = this;
       if (self.addresses.length === 0) {
-        self.$axios.post('/api/person-addresses', {
+        self.$axios.post('/hi_story/person-addresses', {
           c_personid: self.c_personid
         })
         .then( response => {
@@ -392,7 +392,7 @@ export default {
     updateEntry () {
       const self = this;
       if (self.entry.length === 0) {
-        self.$axios.post('/api/person-entry', {
+        self.$axios.post('/hi_story/person-entry', {
           c_personid: self.c_personid
         })
         .then( response => {
@@ -414,7 +414,7 @@ export default {
     updatePostings () {
       const self = this;
       if (self.postings.length === 0) {
-        self.$axios.post('/api/person-postings', {
+        self.$axios.post('/hi_story/person-postings', {
           c_personid: self.c_personid
         })
         .then( response => {
@@ -436,7 +436,7 @@ export default {
     updateSocialStatus () {
       const self = this;
       if (self.socialStatus.length === 0) {
-        self.$axios.post('/api/person-social-status', {
+        self.$axios.post('/hi_story/person-social-status', {
           c_personid: self.c_personid
         })
         .then( response => {
@@ -458,7 +458,7 @@ export default {
     updateKinship () {
       const self = this;
       if (self.kinship.length === 0) {
-        self.$axios.post('/api/person-kinship', {
+        self.$axios.post('/hi_story/person-kinship', {
           c_personid: self.c_personid
         })
         .then( response => {
@@ -480,7 +480,7 @@ export default {
     updateAssociation () {
       const self = this;
       if (self.association.length === 0) {
-        self.$axios.post('/api/person-association', {
+        self.$axios.post('/hi_story/person-association', {
           c_personid: self.c_personid
         })
         .then( response => {
@@ -502,7 +502,7 @@ export default {
     updateWorks () {
       const self = this;
       if (self.works.length === 0) {
-        self.$axios.post('/api/person-works', {
+        self.$axios.post('/hi_story/person-works', {
           c_personid: self.c_personid
         })
         .then( response => {

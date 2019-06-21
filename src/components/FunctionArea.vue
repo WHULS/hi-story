@@ -390,7 +390,7 @@ export default {
     onPeopleRouteClick(cbdbid) {
       const self = this;
 
-      self.$axios.post('/api/person-events', {
+      self.$axios.post('/hi_story/person-events', {
         c_personid: cbdbid
       })
       .then( response => {
@@ -413,7 +413,7 @@ export default {
         return;
       }
       
-      self.$axios.post('/api/search-people', {
+      self.$axios.post('/hi_story/search-people', {
         nameString: str
       })
       .then( response => {
