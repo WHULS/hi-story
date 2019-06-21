@@ -185,6 +185,8 @@
               </ol>
             </div>
           </el-carousel-item>
+
+          <!-- 4. Social association -->
           <el-carousel-item>
             <div class="peopleinfor-carousel-item">
               <h1 style="text-align:left;margin:0;">社会关系</h1>
@@ -209,12 +211,22 @@
               </ol>
             </div>
           </el-carousel-item>
+
+          <!-- 5. Works -->
           <el-carousel-item>
             <div class="peopleinfor-carousel-item">
               <h1 style="text-align:left;margin:0;">作品</h1>
-              <table>
-
-              </table>
+              <ol>
+                <li v-for="item in works" :key="item.TextId">
+                  <span style="font-weight:bold;">{{ item.TextName }}</span>
+                  <br/>
+                  <ul>
+                    <li v-if="item.Year">创作年代：{{ item.Year }}</li>
+                    <li>出处：{{ item.Source }}</li>
+                    <li>角色：{{ item.Role }}</li>
+                  </ul>
+                </li>
+              </ol>
             </div>
           </el-carousel-item>
         </el-carousel>
@@ -479,8 +491,6 @@ export default {
           let sResultsStr = S.t2s(tResultsStr);
 
           self.association = JSON.parse(sResultsStr);
-
-          console.log(self.association);
         })
         .catch( error => {
           if (error) {
@@ -503,8 +513,6 @@ export default {
           let sResultsStr = S.t2s(tResultsStr);
 
           self.works = JSON.parse(sResultsStr);
-
-          console.log(self.works);
         })
         .catch( error => {
           if (error) {

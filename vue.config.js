@@ -4,11 +4,11 @@ module.exports = {
   devServer: {
     proxy: {
       '/api': {
-        target: 'http://192.168.1.102:8888/', // 在这里输入代理地址
+        target: 'http://study.rsgis.whu.edu.cn/', // 在这里输入代理地址
         // target: 'http://localhost:8888/',
         changeOrigin: true,
         pathRewrite: {
-          '^/api': '/api'
+          '^/api': '/hi_story'
         }
       }
     },

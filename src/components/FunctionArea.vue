@@ -279,13 +279,7 @@ export default {
           c_name: 'Wang Anshi',
           c_name_chn: '王安石',
           event_number: 0
-        },
-        {
-          c_personid: 423045,
-          c_name: 'Su Xueshi',
-          c_name_chn: '蘇學軾',
-          event_number: 0
-        },
+        }
       ],
 
       timeOutIdentifier: 0,
@@ -394,7 +388,20 @@ export default {
       self.isPeopleInfoDialogShow = true;
     },
     onPeopleRouteClick(cbdbid) {
-      alert(cbdbid);
+      const self = this;
+
+      self.$axios.post('/api/person-events', {
+        c_personid: cbdbid
+      })
+      .then( response => {
+        const events = response.data.results;
+        bus.$emit('show-events', events);
+      })
+      .catch( error => {
+        if (error) {
+          console.error(error);
+        }
+      });
     },
 
     onSearchPeopleClick() {
